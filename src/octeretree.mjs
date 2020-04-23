@@ -63,6 +63,14 @@ function octEnt( x, y, z, level, depth ) {
         return octEntResult;
 }
 
+const lookupTable = new Array(32)
+
+function octIndex( x, level ) {
+	return (((Math.pow(8,(level+1)))-1)/7) + (x*8);
+	let base = 0;
+	for( let t = 0; t <= level; t++ ) base += 1<<(t*3);
+	return base + (x * 8);
+}
 	
 const depths = [maxInt(dim0),maxInt(dim1),maxInt(dim2)];
         
