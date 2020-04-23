@@ -149,131 +149,48 @@ function octeretree() {
 	// this builds bits in an octree...
 	        
 	// start at the most detailed level, checking the real data.
-        {
-		const xsize = octRuler( 1, level );
-        	for( let z = 0; z < xsize && z < dim2; z++ ) 
-                	for( let y = 0; y < xsize && y < dim1; y++ )
-	                	for( let x = 0; x < xsize && x < dim0; x++ ) {
-                        		let ent = octEnt( x, y, z, level, depth );
-                                       	let index = ent[0]+ent[1]*dim0 + ent[2]*dim0*dim1;
-                                        let bits = octBits[(index>>5)|0];
-                                        const bit = index & 0x1f;
-                                        let newIndex, newBit;
-					if( data[index] < 0 ) {
-                                        	bits |= 1 << (index & 0x1f);
-                                        }
-                                        if( !(bits & ( 1 << index & 0x1f ) ) )
-                                        	
-                                        // this is already solid because of its own point.
-                                       	level++;
-	                                        	ent = octEnt( x*2, y*2, z*2, level, depth );
-							if( data[index = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1] < 0 ) {
-                                                        	bits |= bit;
-                                                	}
-	                                        	else { ent = octEnt( x*2 + 1, y*2, z*2, level, depth );
-							if( data[index = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1] < 0 ) {
-                                                        	bits |= bit;
-                                                	}
-                	                        	else { ent = octEnt( x*2, y*2 + 1, z*2, level, depth );
-							if( data[index = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1] < 0 ) {
-                                	                	bits |= bit;
-                                        		}
-	                                        	else { ent = octEnt( x*2 + 1, y*2 + 1, z*2, level, depth );
-							if( data[index = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1] < 0 ) {
-                                                        	bits |= bit;
-                                                	}
-
-	                                        	else { ent = octEnt( x*2, y*2, z*2 + 1, level, depth );
-							if( data[index = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1] < 0 ) {
-                                                        	bits |= bit;
-                                                	}
-	                                        	else { ent = octEnt( x*2 + 1, y*2, z*2 + 1, level, depth );
-							if( data[index = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1] < 0 ) {
-                                                        	bits |= bit;
-                                                	}
-                	                        	else { ent = octEnt( x*2, y*2 + 1, z*2 + 1, level, depth );
-							if( data[index = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1] < 0 ) {
-                                	                	bits |= bit;
-                                        		}
-	                                        	else { ent = octEnt( x*2 + 1, y*2 + 1, z*2 + 1, level, depth );
-							if( data[index = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1] < 0 ) {
-                                                        	bits |= bit;
-                                                	}
-                                                        }}}}}}}
-					level--;
-        			}
-	}
-
-	// this is just the merge of bits from lower levels...
-        for( level = level-1; level >= 0; level-- ) {
-		const xsize = octRuler( 1, level );
-        	for( let z = 0; z < xsize && z < dim2; z++ ) 
-                	for( let y = 0; y < xsize && y < dim1; y++ )
-	                	for( let x = 0; x < xsize && x < dim0; x++ ) {
-                                       	level++;
-	                                        ent = octEnt( x*2, y*2, z*2, level, depth );
-                                                newIndex = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1; newBit = newIndex & 0x1f; newIndex >>= 5;
-						if( octBits[newIndex] & newBit ) {
-                                                	bits |= 1 << (index & 0x1f);
-                                                }
-	                                        else { 
-						ent = octEnt( x*2+1, y*2, z*2, level, depth );
-                                                newIndex = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1; newBit = newIndex & 0x1f; newIndex >>= 5;
-						if( octBits[newIndex] & newBit ) {
-                                                	bits |= 1 << (index & 0x1f);
-                                                }
-                	                        else { 
-						ent = octEnt( x*2, y*2+1, z*2, level, depth );
-                                                newIndex = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1; newBit = newIndex & 0x1f; newIndex >>= 5;
-						if( octBits[newIndex] & newBit ) {
-                                	        	bits |= 1 << (index & 0x1f);
-                                        	}
-	                                        else { 
-						ent = octEnt( x*2+1, y*2+1, z*2, level, depth );
-                                                newIndex = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1; newBit = newIndex & 0x1f; newIndex >>= 5;
-						if( octBits[newIndex] & newBit ) {
-                                                	bits |= 1 << (index & 0x1f);
-                                                }
-
-	                                        else { 
-						ent = octEnt( x*2, y*2, z*2+1, level, depth );
-                                                newIndex = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1; newBit = newIndex & 0x1f; newIndex >>= 5;
-						if( octBits[newIndex] & newBit ) {
-                                                	bits |= 1 << (index & 0x1f);
-                                                }
-	                                        else { 
-						ent = octEnt( x*2+1, y*2, z*2+1, level, depth );
-                                                newIndex = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1; newBit = newIndex & 0x1f; newIndex >>= 5;
-						if( octBits[newIndex] & newBit ) {
-                                                	bits |= 1 << (index & 0x1f);
-                                                }
-                	                        else { 
-						ent = octEnt( x*2, y*2+1, z*2+1, level, depth );
-                                                newIndex = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1; newBit = newIndex & 0x1f; newIndex >>= 5;
-						if( octBits[newIndex] & newBit ) {
-                                	        	bits |= 1 << (index & 0x1f);
-                                        	}
-	                                        else { 
-						ent = octEnt( x*2+1, y*2+1, z*2+1, level, depth );
-                                                newIndex = ent[0] + ent[1]*dim0 + ent[2]*dim0*dim1; newBit = newIndex & 0x1f; newIndex >>= 5;
-						if( octBits[newIndex] & newBit ) {
-                                                	bits |= 1 << (index & 0x1f);
-                                                }
-                                                }}}}}}}
-                                        }
-                                       	level--;
-                                        octBits[index>>5] = bits;
-				}                		
-        }
-        
-        
-        
-	function node() {
-		this.value = 0.0;
-                this.level = 0;
-	        this.children = [ null,null,null,null
-        	                , null,null,null,null ];
-	}
+		for( ; level >= 0; level-- ) {
+			const xsize = octRuler( 1, level );
+			for( let z = 0; z < xsize && z < dim2; z++ ) 
+				for( let y = 0; y < xsize && y < dim1; y++ )
+					for( let x = 0; x < xsize && x < dim0; x++ ) {
+						let ent = octEnt( x, y, z, level, depth );
+						let index = octBitIndex( x + y*xsize + z*xsize*xsize, level );
+						let bits = octBits[(index>>5)];
+						const bit = index & 0x1f;
+						let newIndex, newBit;
+						if( data[index] < 0 ) {
+							bits |= 1 << (index & 0x1f);
+						}
+									
+						// this is already solid because of its own point.
+						if( level == depth-1 ) {
+							for( let oct = 0; oct < 8; oct++ ) {
+								ent = octEnt( x*2 + octIndex[oct][0], y*2 + octIndex[oct][1], z*2 + octIndex[oct][2], level+1, depth );
+								if( data[index = ent[0]+ent[1]*dim0+ent[2]*dim0*dim1] < 0 ) {
+									bits |= bit;
+									break;
+								}
+							}
+						} else {
+							// my child bits... 
+							for( let oct = 0; oct < 8; oct++ ) {
+								let oldBit = octBitIndex( x*2 + octIndex[oct][0] 
+									+ ( y*2 + octIndex[oct][1] ) * xsize
+									+ ( z*2 + octIndex[oct][2] ) * xSize*xsize
+									, level+1 );
+								for( let childBit = 0; childBit < 8; childBit++ ) {
+									if( octBits[(oldBit+childBit)/32] + ( (newBit+childBit)&0x1f) ) {
+										bits |= bit;
+										break;
+									}
+							}
+						}
+						octBits[index>>5] = bits;
+				}
+						
+		}
+			
 
 	
 
