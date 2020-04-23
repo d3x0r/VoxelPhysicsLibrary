@@ -283,6 +283,21 @@ function octeretree() {
 
 ```
 
+## References (maybe)
+
+http://isg.cs.tcd.ie/cosulliv/Pubs/spheres.pdf
+
+External proof of concept - uses arbitrary mesh clouds.
+https://github.com/Simon089/SphereOctree (also mentions 'miniball' https://people.inf.ethz.ch/gaertner/subdir/software/miniball.html  which is a closest-sphere calculation.)
+
+HERO algorithm; using bitmasks to trace steps and history of path...
+https://diglib.eg.org/bitstream/handle/10.2312/EGGH.EGGH89.061-073/061-073.pdf?sequence=1&isAllowed=y
+
+http://isg.cs.tcd.ie/cosulliv/Pubs/spheres.pdf (about just spheres as a basis collider) (has centroid of octree)
+
+(unused; more about like compression)  http://www.cs.utah.edu/~knolla/octiso-rt06.pdf
+
+
 
 ```
 this is a quad-tree, but the same idea extends directly to octree and spheres instead of circles.  The inner smaller circles, happen to be that that circle is also around a point directly in the data cloud - this turned out to be inaccurate, as measuring that way omits a lot of circles... 22https://d3x0r.org/javascript/VPL/3-level-grid-missing-points.png  (greens and purples)
