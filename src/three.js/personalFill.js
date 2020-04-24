@@ -1,7 +1,5 @@
-import * as THREE from "./three.min.js"
-
-//if( !THREE.REVISION.includes( "d3x0r" ) ) 
-{
+const THREE = require ( "./three.min.js")
+if( !THREE.REVISION.includes( "d3x0r" ) ) {
 
 if( Number(THREE.REVISION) === 74 ) {
 }
