@@ -143,59 +143,46 @@ And, to be really effective, values should be setup in the bit array at least...
 
 var depth = 100; /// 2^100 depth should be quite a good resolution?
 
-
 function octeretree() {
-        let level = depth-1;
+	let level = depth-1;
 	// this builds bits in an octree...
-	        
-	// start at the most detailed level, checking the real data.
-		for( ; level >= 0; level-- ) {
-			const xsize = octRuler( 1, level );
-			for( let z = 0; z < xsize && z < dim2; z++ ) 
-				for( let y = 0; y < xsize && y < dim1; y++ )
-					for( let x = 0; x < xsize && x < dim0; x++ ) {
-						let ent = octEnt( x, y, z, level, depth );
-						let index = octBitIndex( x + y*xsize + z*xsize*xsize, level );
-						let bits = octBits[(index>>5)];
-						const bit = index & 0x1f;
-						let newIndex, newBit;
-						if( data[index] < 0 ) {
-							bits |= 1 << (index & 0x1f);
-						}
-									
-						// this is already solid because of its own point.
-						if( level == depth-1 ) {
-							for( let oct = 0; oct < 8; oct++ ) {
-								ent = octEnt( x*2 + octIndex[oct][0], y*2 + octIndex[oct][1], z*2 + octIndex[oct][2], level+1, depth );
-								if( data[index = ent[0]+ent[1]*dim0+ent[2]*dim0*dim1] < 0 ) {
-									bits |= bit;
-									break;
-								}
-							}
-						} else {
-							// my child bits... 
-							for( let oct = 0; oct < 8; oct++ ) {
-								let oldBit = octBitIndex( x*2 + octIndex[oct][0] 
-									+ ( y*2 + octIndex[oct][1] ) * xsize
-									+ ( z*2 + octIndex[oct][2] ) * xSize*xsize
-									, level+1 );
-								for( let childBit = 0; childBit < 8; childBit++ ) {
-									if( octBits[(oldBit+childBit)/32] + ( (newBit+childBit)&0x1f) ) {
-										bits |= bit;
-										break;
-									}
-							}
-						}
-						octBits[index>>5] = bits;
+	const xsize = octSize( level );
+	// highest level first; interprets the raw data presense/abense.
+	for( let z = 0; (z < (dim2+1)/2); z++ ) 
+		for( let y = 0; (y < (dim1+1)/2); y++ )
+			for( let x = 0; (x < (dim0+1)/2); x++ ) {
+				let bits = 0;
+				// this is probably faster unrolled; and constants substituted.
+				for( let oct = 0; oct < 8; oct++ ) {
+					if( ( ( x*2 + octIndex[oct][0] ) < dim0 ) 
+					  &&( ( y*2 + octIndex[oct][1] ) < dim1 )
+					  &&( ( z*2 + octIndex[oct][2] ) < dim2 ) )
+					if( (-data[x*2 + octIndex[oct][0]+(y*2 + octIndex[oct][1])*dim0+(z*2 + octIndex[oct][2])*dim0*dim1] ) > 0 ) {
+						bits |= 1 << oct;
+					}
 				}
-						
-		}
-			
-
-	
-
-
-}
+				octBytes[ octBitIndex(x + y*xsize + z*xsize*xsize, level)] = bits;
+			}
+		
+	level--; // remaining levels... read prior level for presense
+	for( ; level > 0; level-- ) {
+		const xsize = octSize(  level );
+		const nsize = octSize(  level+1 ); // need the size on next level
+		for( let z = 0; z < xsize && z < dim2; z++ ) 
+			for( let y = 0; y < xsize && y < dim1; y++ )
+				for( let x = 0; x < xsize && x < dim0; x++ ) {
+					const base = x + y*xsize + z*xsize*xsize;
+					var bits = 0;
+					// this is probably faster unrolled; and constants substituted.
+					for( let oct = 0; oct < 8; oct++ ) {
+						const childBase = (x*2+octIndex[oct][0]) +(y*2+octIndex[oct][1])*nsize+(z*2+octIndex[oct][2])*nsize*nsize;
+						if( octBytes[ (((Math.pow(8,(level+1)))-1)/7) + (childBase)-1 ] )
+							bits |= 1 << oct;
+					}
+					octBytes[ octBitIndex(base, level) ] = bits;
+				}
+	}
+}		
 
 
 ```
@@ -209,6 +196,11 @@ This will give a total force of impact for its given density.
 
 
 ## References (maybe)
+
+// This is exactly where this is heading. (sort of; this is still on an arbitrary mesh)
+https://upcommons.upc.edu/bitstream/handle/2117/84837/R05-23.pdf
+
+
 
 http://isg.cs.tcd.ie/cosulliv/Pubs/spheres.pdf
 
