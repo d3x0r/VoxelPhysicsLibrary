@@ -200,6 +200,14 @@ function octeretree() {
 
 ```
 
+###
+
+On combining angular and linear velocity - this is only a matter at the exact points of impact.
+The centroid of the leaf nodes in contact should calculate their full relative velocity using the base body velocity plus any velocity from rotation; 
+This will give a total force of impact for its given density.
+
+
+
 ## References (maybe)
 
 http://isg.cs.tcd.ie/cosulliv/Pubs/spheres.pdf
@@ -210,9 +218,23 @@ https://github.com/Simon089/SphereOctree (also mentions 'miniball' https://peopl
 HERO algorithm; using bitmasks to trace steps and history of path...
 https://diglib.eg.org/bitstream/handle/10.2312/EGGH.EGGH89.061-073/061-073.pdf?sequence=1&isAllowed=y
 
+For re-projecting voxel volumes into other volumes. (for merging static physics collisions)
+https://arxiv.org/pdf/1412.4941.pdf ( An exact general remeshing scheme applied to physically conservative voxelization? )
+
 http://isg.cs.tcd.ie/cosulliv/Pubs/spheres.pdf (about just spheres as a basis collider) (has centroid of octree)
 
+// rocket phsyics of tethered, rotating spacecraft
+https://docs.lib.purdue.edu/cgi/viewcontent.cgi?article=1435&context=open_access_dissertations
+
+https://www.euclideanspace.com/physics/kinematics/combinedVelocity/index.htm  https://www.euclideanspace.com/physics/kinematics/combinedVelocity/index.htm
+https://isaacphysics.org/concepts/cp_ang_eq_of_motion
+
+https://openstax.org/books/university-physics-volume-1/pages/3-6-finding-velocity-and-displacement-from-acceleration
+
+https://www.maplesoft.com/content/EngineeringFundamentals/4/MapleDocument_30/Rotation%20MI%20and%20Torque.pdf
+
 (unused; more about like compression)  http://www.cs.utah.edu/~knolla/octiso-rt06.pdf
+
 
 
 
