@@ -201,6 +201,10 @@ This will give a total force of impact for its given density.
 https://upcommons.upc.edu/bitstream/handle/2117/84837/R05-23.pdf
 
 
+this is actually pretty old (2010)  section 6.2 Beam Optimization  ; Efficient Sparse Voxel Octrees – Analysis, Extensions, and Implementation 
+https://users.aalto.fi/~laines9/publications/laine2010tr1_paper.pdf
+
+
 
 http://isg.cs.tcd.ie/cosulliv/Pubs/spheres.pdf
 
@@ -228,7 +232,10 @@ https://www.maplesoft.com/content/EngineeringFundamentals/4/MapleDocument_30/Rot
 (unused; more about like compression)  http://www.cs.utah.edu/~knolla/octiso-rt06.pdf
 
 
+more on textures
 
+This is a good demonstration of cube-mapping practices including the quarter-slice top/bottom which solves the extreme edge mapping.
+http://paulbourke.net/miscellaneous/cubemaps/    (Fixed a* perlin-sphere.js)
 
 ```
 this is a quad-tree, but the same idea extends directly to octree and spheres instead of circles.  The inner smaller circles, happen to be that that circle is also around a point directly in the data cloud - this turned out to be inaccurate, as measuring that way omits a lot of circles... 22https://d3x0r.org/javascript/VPL/3-level-grid-missing-points.png  (greens and purples)
